@@ -1,0 +1,90 @@
+module teste_zoom_display (
+    input wire clock,
+    input wire reset,
+    input wire [1:0] sel_modulo, // 00 a 11 para selecionar o algoritmo
+    output wire [6:0] segmentos,
+    output wire [5:0] anodo
+);
+
+    // --- Instanciação dos Módulos de Zoom ---
+    wire [127:0] saida_zoom_out_media;
+    wire [127:0] saida_zoom_in_rep;
+    wire [31:0]  saida_zoom_out_nn;
+    wire [127:0] saida_zoom_in_nn;
+
+    square_media_2x_sequential zoom_out_media_inst (
+        .clock(clock), .reset(reset), .imagem_reduzida(saida_zoom_out_media)
+    );
+
+    replication_pixel_sequential zoom_in_rep_inst (
+        .clock(clock), .reset(reset), .imagem_ampliada(saida_zoom_in_rep)
+    );
+
+    nn_zoom_out zoom_out_nn_inst (
+        .clock(clock), .reset(reset), .pixel_out(saida_zoom_out_nn)
+    );
+    
+    // Usando o módulo modificado
+    nn_zoom_in zoom_in_nn_inst (
+        .clock(clock), .reset(reset), .imagem_ampliada(saida_zoom_in_nn)
+    );
+
+    // --- Lógica de Navegação e Seleção de Pixel ---
+    reg [23:0] contador_pixel; // Contador lento para mudar o pixel exibido
+    always @(posedge clock or negedge reset) begin
+        if (~reset)
+            contador_pixel <= 0;
+        else
+            contador_pixel <= contador_pixel + 1;
+    end
+
+    // O índice do pixel muda a cada ~0.3 segundos (para clock de 50 MHz)
+    reg [4:0] indice_pixel;
+    always @(posedge contador_pixel[23]) begin
+        if(~reset)
+            indice_pixel <= 0;
+        else
+            indice_pixel <= indice_pixel + 1; // Varrerá de 0 a 31
+    end
+    
+    // --- Seleção dos Dados de Saída ---
+    reg [7:0] valor_pixel_selecionado;
+    always @* begin
+        case (sel_modulo)
+            2'b00: // square_media_2x_sequential (16 pixels)
+                valor_pixel_selecionado = saida_zoom_out_media[(indice_pixel % 16) * 8 +: 8];
+            2'b01: // replication_pixel_sequential (16 pixels)
+                valor_pixel_selecionado = saida_zoom_in_rep[(indice_pixel % 16) * 8 +: 8];
+            2'b10: // nn_zoom_out (4 pixels)
+                valor_pixel_selecionado = saida_zoom_out_nn[(indice_pixel % 4) * 8 +: 8];
+            2'b11: // nn_zoom_in (16 pixels)
+                valor_pixel_selecionado = saida_zoom_in_nn[(indice_pixel % 16) * 8 +: 8];
+            default:
+                valor_pixel_selecionado = 8'd0;
+        endcase
+    end
+    
+    // --- Preparação dos Dados para o Display ---
+    wire [3:0] bcd_c, bcd_d, bcd_u;
+    bin_to_bcd conversor_bcd (
+        .bin_in(valor_pixel_selecionado),
+        .bcd_centenas(bcd_c),
+        .bcd_dezenas(bcd_d),
+        .bcd_unidades(bcd_u)
+    );
+
+    // --- Instanciação do Driver do Display ---
+    display_driver driver_inst (
+        .clock(clock),
+        .reset(reset),
+        .digito6(sel_modulo + 1), // Módulo 1 a 4
+        .digito5((indice_pixel) / 10), // Dezena do índice
+        .digito4((indice_pixel) % 10), // Unidade do índice
+        .digito3(bcd_c),
+        .digito2(bcd_d),
+        .digito1(bcd_u),
+        .segmentos(segmentos),
+        .anodo(anodo)
+    );
+
+endmodule
