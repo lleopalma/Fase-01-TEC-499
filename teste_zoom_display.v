@@ -88,3 +88,8 @@ module teste_zoom_display (
     );
 
 endmodule
+
+// 00: square_media_2x_sequential
+// 01: replication_pixel_sequential
+// 10: nn_zoom_out
+// 11: nn_zoom_in
