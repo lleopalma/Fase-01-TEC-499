@@ -1,44 +1,16 @@
 module block_averaging
-#(
-    parameter largura = 320,
-    parameter altura = 240,
-    parameter fator = 2
-)
 (
-    input clk,
-    input reset,
-    input wire [7:0] pixel_in,
-    output reg [7:0] pixel_out
+    input wire [31:0] buffer_pixels_in_ba,
+    output wire [63:0] buffer_pixels_out_ba
 );
 
-    localparam num_pixels_in = fator*fator;
-    reg [3:0] contador;
-    reg [11:0] soma;
+    wire [7:0] byte0, byte1, byte2, byte3;
 
-    always @(posedge clk or posedge reset) 
-    begin
-        if (reset) 
-        begin
-            contador <= 0;
-            soma <= 0;
-            pixel_out <= 0;
-        end
+    assign byte0 = (buffer_pixels_in_ba >> 24) & 8'b11111111;
+    assign byte1 = (buffer_pixels_in_ba >> 16) & 8'b11111111;
+    assign byte2 = (buffer_pixels_in_ba >> 8)  & 8'b11111111;
+    assign byte3 = buffer_pixels_in_ba & 8'b11111111;
 
-        else
-        begin
-            if (contador == num_pixels_in)
-            begin
-                pixel_out <= soma >> 2;
-                contador <= 0;
-                soma <= 0;
-            end
-
-            else 
-            begin
-                soma <= soma + pixel_in;
-                contador <= contador + 1;
-            end    
-        end
-    end
+    assign buffer_pixels_out_ba = (byte0 + byte1 + byte2 + byte3) >> 2;
 
 endmodule
