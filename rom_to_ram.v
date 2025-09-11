@@ -12,24 +12,21 @@ module rom_to_ram (
     parameter TOTAL_PIXELS = 160*120; // pixels da ROM
 
     reg [18:0] counter;
-    reg [7:0] rom_data_reg;
 
-    always @(posedge clk or negedge reset) begin
-        if (!reset) begin
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
             counter <= 0;
             rom_addr <= 0;
             ram_wraddr <= 0;
             ram_data <= 0;
             ram_wren <= 0;
             done <= 0;
-            rom_data_reg <= 0;
-        end else begin
-            rom_data_reg <= rom_data; // pega dado com 1 ciclo de atraso
-
+        end 
+		  else begin
             if (counter < TOTAL_PIXELS) begin
                 rom_addr   <= counter;
                 ram_wraddr <= counter;
-                ram_data   <= rom_data_reg;
+                ram_data   <= rom_data;
                 ram_wren   <= 1;
                 counter    <= counter + 1;
             end else begin
