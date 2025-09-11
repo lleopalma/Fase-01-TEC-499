@@ -23,7 +23,7 @@ module line_buffer (
             wrpntr <= wrpntr + 'd1;
     end
 
-    assign = pixel_out = [line[rdpntr], line[rdpntr + 1], line[rdpntr + 2]];
+    assign pixel_out = [line[rdpntr], line[rdpntr + 1], line[rdpntr + 2]];
 
     always @(posedge clk) begin
         if (rst)
