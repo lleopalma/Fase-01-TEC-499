@@ -3,7 +3,7 @@ module line_buffer (
     input rst,
     input [7:0] pixel,
     input pixel_valid,
-    output [23:0] pixel_out,
+    output [31:0] pixel_out,
     input rd_pixel
 );
     reg [7:0] line [639:0];
@@ -23,7 +23,7 @@ module line_buffer (
             wrpntr <= wrpntr + 'd1;
     end
 
-    assign pixel_out = [line[rdpntr], line[rdpntr + 1], line[rdpntr + 2]];
+    assign pixel_out = [line[rdpntr], line[rdpntr + 1], line[rdpntr + 2], line[rdpntr + 3]];
 
     always @(posedge clk) begin
         if (rst)
