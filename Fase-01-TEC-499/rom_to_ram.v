@@ -1,0 +1,68 @@
+module rom_to_ram #(
+    parameter LARGURA = 160,
+    parameter ALTURA = 120,
+    parameter FATOR = 2,
+    parameter NOVA_LARGURA = LARGURA * FATOR,
+    parameter NOVA_ALTURA = ALTURA * FATOR
+)(
+    input wire clk,
+    input wire reset,
+    input wire switch,
+
+    output reg [18:0] rom_addr,
+    input wire [7:0] rom_data,
+    output reg [18:0] ram_wraddr,
+    output reg [7:0] ram_data,
+    output reg ram_wren,
+    output reg done
+);
+
+    // Contadores
+    reg [8:0] linha = 0;
+    reg [8:0] coluna = 0;
+    reg [8:0] di = 0;
+    reg [8:0] dj = 0;
+
+    wire [1:0] factor = (switch) ? FATOR : 1;
+    wire [9:0] width = (switch) ? NOVA_LARGURA : LARGURA;
+
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            linha <= 0; coluna <= 0;
+            di <= 0; dj <= 0;
+            ram_wren <= 0;
+            done <= 0;
+        end else if (!done) begin
+            // ROM
+            rom_addr <= linha * LARGURA + coluna;
+
+            // RAM
+            ram_wraddr <= (linha * factor + di) * width + (coluna * factor + dj);
+            ram_data <= rom_data;
+            ram_wren <= 1;
+
+            // Próximo pixel na linha do bloco
+            if (dj < factor-1) begin
+                dj <= dj + 1;
+            end else begin
+                dj <= 0;
+                if (di < factor-1) begin
+                    di <= di + 1;
+                end else begin
+                    di <= 0;
+                    if (coluna < LARGURA-1)
+                        coluna <= coluna + 1;
+                    else begin
+                        coluna <= 0;
+                        if (linha < ALTURA-1)
+                            linha <= linha + 1;
+                        else
+                            done <= 1;
+                    end
+                end
+            end
+        end else begin
+            ram_wren <= 0;
+        end
+    end
+endmodule
