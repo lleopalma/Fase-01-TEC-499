@@ -28,10 +28,10 @@ Sumário
       * [MEMORY](#memory)
       * [DONE](#done)
    * [Unidade Lógica e Aritmética (ULA)](#ula)
-      * [Replicação de Pixel](#rep_pixel)
+      * [Replicação de Pixel (Zoom_in)](#rep_pixel)
       * [Vizinho mais próximo (Zoom-in)](#nn_zoomin)
       * [Decimação/Vizinho mais próximo (Zoom-out)](#dec)
-      * [Média de Blocos](#media)
+      * [Média de Blocos(Zoom-out)](#media)
    * [Referências](#referencias)
 
 <div>
