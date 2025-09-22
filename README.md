@@ -47,22 +47,22 @@ Sumário
   A máquina de estados é responsável por coordenar as operações de leitura, processamento e escrita de dados entre a ROM e a RAM. Abaixo estão os estados planejados para o fluxo:
   </p>
 
-  <h3 id="idle">IDLE</h3>
+  <h2 id="idle">IDLE</h2>
   <p>Estado inicial, aguardando alteração de imagem ou comando de processamento.</p>
 
-  <h3 id="read">READ_ROM</h3>
+  <h2 id="read">READ_ROM</h2>
   <p>Realiza a leitura da imagem a partir da memória ROM.</p>
 
-  <h3 id="write">WRITE_RAM</h3>
+  <h2 id="write">WRITE_RAM</h2>
   <p>Escreve a imagem na RAM após leitura e/ou processamento.</p>
 
-  <h3 id="resize">DECODE</h3>
+  <h2 id="resize">DECODE</h2>
   <p>Executa os algoritmos de redimensionamento (zoom in ou zoom out), caso habilitado.</p>
 
-  <h3 id="memory">MEMORY</h3>
+  <h2 id="memory">MEMORY</h2>
   <p>Confirma a integridade da operação de escrita na RAM.</p>
 
-  <h3 id="done">DONE</h3>
+  <h2 id="done">DONE</h2>
   <p>Finaliza o ciclo e retorna ao estado IDLE.</p>
 </div>
 
@@ -78,7 +78,6 @@ Sumário
 <p>O módulo implementa o algoritmo de <b>Zoom-in por replicação de pixels</b>, uma técnica de redimensionamento de imagens.  
 
 #### &#8594; Funcionamento
-<p>
 - A imagem original é armazenada na **ROM** com dimensões <code>LARGURA × ALTURA</code>.  
 - Cada pixel é copiado várias vezes em sequência, formando um bloco de tamanho <code>FATOR × FATOR</code> na imagem de saída.  
 - Assim, a resolução final é multiplicada pelo fator escolhido. Exemplo: com <code>FATOR = 2</code>, uma imagem de <code>160 × 120</code> se torna <code>320 × 240</code>.  
@@ -96,6 +95,7 @@ Sumário
 - A ampliação pode gerar uma aparência **mais quadrada ou pixelada**, principalmente em fatores maiores. </p>
 
 <h3 id="nn_zoomin">Vizinho mais próximo (Zoom-in)</h3>
+<p>
 <p>O módulo implementa o algoritmo de <b>Zoom-in por vizinho mais próximo</b>, uma técnica de redimensionamento em que cada novo pixel da imagem ampliada assume o valor do pixel original mais próximo.  
 
 #### &#8594; Funcionamento
@@ -117,6 +117,7 @@ Sumário
 - Pode deixar a imagem com uma aparência **mais quadrada ou pixelada**, já que não aplica técnicas de suavização ou interpolação. </p>
 
 <h3 id="dec">Decimação / Vizinho mais próximo (Zoom-out)</h3>
+<p>
 <p>O módulo implementa o algoritmo de <b>Zoom-out por decimação de pixels</b>, uma técnica de redimensionamento de imagens digitais descartando parte dos pixels da imagem original.  
 
 #### &#8594; Funcionamento
@@ -139,6 +140,7 @@ Sumário
 - Linhas e bordas finas da imagem original podem desaparecer após a redução. </p>
 
 <h3 id="media">Média de Blocos (Zoom-out)</h3>
+<p>
 <p>O módulo implementa o algoritmo de <b>Zoom-out por média de blocos</b>, uma técnica que reduz a resolução da imagem calculando a média dos pixels em cada região.  
 
 #### &#8594; Funcionamento
@@ -172,7 +174,6 @@ Sumário
 ‌  * FPGAcademy. Disponível em: <https://fpgacademy.org>.<br>
   * Cyclone V Device Overview. Disponível em: <https://www.intel.com/content/www/us/en/docs/programmable/683694/current/cyclone-v-device-overview.html>.<br>
   * TECHNOLOGIES, T. Terasic - SoC Platform - Cyclone - DE1-SoC Board. Disponível em: <https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&No=836>.<br>
-
   * DUNNE, Robert. Computer Architecture Tutorial Using an FPGA: ARM & Verilog Introductions. Downers Grove, Illinois: Gaul Communications, 2020. ISBN 978--970112491.<br>
 
 </div>
