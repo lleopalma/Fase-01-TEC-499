@@ -5,7 +5,7 @@
 Para o desenvolvimento do projeto, foi utilizado o kit de desenvolvimento DE1-SoC, equipado com o processador Cyclone V, possibilitando a leitura e escrita de dados diretamente na memória SDRAM do dispositivo. O ambiente de desenvolvimento adotado foi o Intel Quartus Prime Lite 23.1, utilizando a linguagem de descrição de hardware Verilog. O objetivo do projeto é implementar o redimensionamento de imagens por meio de algoritmos de zoom in e zoom out, operações fundamentais em sistemas de processamento digital de imagens por permitirem ajustar a escala de exibição, melhorar a análise visual e atender aplicações como compressão de dados, reconhecimento de padrões, visão computacional embarcada, processamento em tempo real e interfaces gráficas.
 
 <div align="center">
-    <img src="images/fpga.jpg"><br>
+    <img src="imagens/placa.jpg"><br>
     <strong>Imagem do Site da Altera</strong><br><br>
 </div>
 
