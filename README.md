@@ -91,14 +91,12 @@ Sumário
 
 <div>
   <h2 id="referencias">Referências</h2>
+    
   * PATTERSON, D. A.; HENNESSY, J. L. Computer organization and design : the hardware/software interface, ARM edition / Computer organization and design : the hardware/software interface, ARM edition.<br>
-  
 ‌  * FPGAcademy. Disponível em: <https://fpgacademy.org>.<br>
-‌
   * Cyclone V Device Overview. Disponível em: <https://www.intel.com/content/www/us/en/docs/programmable/683694/current/cyclone-v-device-overview.html>.<br>
-
   * TECHNOLOGIES, T. Terasic - SoC Platform - Cyclone - DE1-SoC Board. Disponível em: <https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&No=836>.<br>
 
-  * DUNNE, Robert. Computer Architecture Tutorial Using an FPGA: ARM & Verilog Introductions. Downers Grove, Illinois: Gaul Communications, 2020. ISBN 978-0-970112491.<br>
+  * DUNNE, Robert. Computer Architecture Tutorial Using an FPGA: ARM & Verilog Introductions. Downers Grove, Illinois: Gaul Communications, 2020. ISBN 978--970112491.<br>
 
 </div>
