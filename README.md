@@ -11,10 +11,10 @@ Para o desenvolvimento do projeto, foi utilizado o kit de desenvolvimento DE1-So
 
 O coprocessador é capaz de lidar com os seguintes algoritmos de redimensionamento: 
 
-* Replicação de Pixel(Zoom-in)
-* Vizinho mais próximo(Zoom-in)
-* Vizinho mais próximo/Decimação(Zoom-out)
-* Média de Blocos(Zoom-out)
+* Replicação de Pixel (Zoom-in)
+* Vizinho mais próximo( Zoom-in)
+* Vizinho mais próximo/Decimação (Zoom-out)
+* Média de Blocos (Zoom-out)
 
 Sumário
 =================
