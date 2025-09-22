@@ -24,7 +24,7 @@ Sumário
       * [IDLE](#idle)
       * [READ_ROM](#read)
       * [WRITE_RAM](#write)
-      * [PROCESS(RESIZE)](#resize)
+      * [DECODE](#resize)
       * [MEMORY](#memory)
       * [DONE](#done)
    * [Unidade Lógica e Aritmética (ULA)](#ula)
@@ -56,7 +56,7 @@ Sumário
   <h3 id="write">WRITE_RAM</h3>
   <p>Escreve a imagem na RAM após leitura e/ou processamento.</p>
 
-  <h3 id="resize">PROCESS (RESIZE)</h3>
+  <h3 id="resize">DECODE</h3>
   <p>Executa os algoritmos de redimensionamento (zoom in ou zoom out), caso habilitado.</p>
 
   <h3 id="memory">MEMORY</h3>
@@ -73,17 +73,96 @@ Sumário
   Abaixo estão descritas as técnicas utilizadas:
   </p>
 
-  <h3 id="rep_pixel">Replicação de Pixel (Zoom-in)</h3>
-  <p>Expande a imagem replicando os pixels, preservando a simplicidade computacional.</p>
+<h3 id="rep_pixel">Replicação de Pixel (Zoom-in)</h3>
+<p>O módulo implementa o algoritmo de <b>Zoom-in por replicação de pixels</b>, uma técnica simples e eficiente para ampliar imagens digitais.  
 
-  <h3 id="nn_zoomin">Vizinho mais próximo (Zoom-in)</h3>
-  <p>Amplia a imagem escolhendo o pixel mais próximo na escala, gerando menos serrilhado que a replicação simples.</p>
+#### ⚙️ Funcionamento
+- A imagem original é armazenada na **ROM** com dimensões <code>LARGURA × ALTURA</code>.  
+- Cada pixel é copiado várias vezes em sequência, formando um bloco de tamanho <code>FATOR × FATOR</code> na imagem de saída.  
+- Assim, a resolução final é multiplicada pelo fator escolhido. Exemplo: com <code>FATOR = 2</code>, uma imagem de <code>160 × 120</code> se torna <code>320 × 240</code>.  
 
-  <h3 id="dec">Decimação / Vizinho mais próximo (Zoom-out)</h3>
-  <p>Reduz a resolução da imagem descartando pixels de acordo com um fator de escala.</p>
+#### 🔄 Lógica do processo
+1. A imagem é percorrida pixel a pixel na ordem de linhas e colunas.  
+2. Cada pixel é replicado para gerar um bloco ampliado na saída.  
+3. Quando todos os pixels são processados, o módulo sinaliza a conclusão através de <code>done</code>.  
 
-  <h3 id="media">Média de Blocos (Zoom-out)</h3>
-  <p>Reduz a imagem calculando a média de blocos de pixels, garantindo uma suavização visual maior.</p>
+#### 🎯 Vantagens
+- Implementação de **baixa complexidade** e rápida em hardware.  
+- Preserva as cores e a estrutura da imagem original.  
+
+#### ⚠️ Limitação
+- A ampliação pode gerar uma aparência **mais quadrada ou pixelada**, principalmente em fatores maiores. </p>
+
+<h3 id="nn_zoomin">Vizinho mais próximo (Zoom-in)</h3>
+<p>O módulo implementa o algoritmo de <b>Zoom-in por vizinho mais próximo</b>, uma técnica clássica de reamostragem de imagens utilizada para aumentar a resolução.  
+
+#### ⚙️ Funcionamento
+- A imagem original está armazenada na **ROM** com dimensões <code>LARGURA × ALTURA</code>.  
+- A saída é uma nova versão ampliada, armazenada na **RAM VGA**, com dimensões <code>NEW_LARG × NEW_ALTURA</code>.  
+- Cada posição da imagem ampliada é associada ao pixel mais próximo da imagem original por meio de um cálculo simples de reamostragem.  
+
+#### 🔄 Lógica do processo
+1. A imagem ampliada é percorrida em todas as posições de saída.  
+2. Para cada coordenada, identifica-se o pixel correspondente da imagem original mais próximo.  
+3. Esse pixel é então copiado para a nova posição da saída.  
+4. Ao final do processamento, o módulo indica que a ampliação está completa.  
+
+#### 🎯 Vantagens
+- Método **rápido** e de **fácil implementação**.  
+- Mantém a **nitidez relativa** da imagem original.  
+- Muito adequado para uso em hardware por não exigir cálculos complexos.  
+
+#### ⚠️ Limitação
+- Pode deixar a imagem com uma aparência **mais quadrada ou pixelada**, já que não aplica técnicas de suavização ou interpolação. </p>
+
+
+<h3 id="dec">Decimação / Vizinho mais próximo (Zoom-out)</h3>
+<p>O módulo implementa o algoritmo de <b>Zoom-out por decimação de pixels</b>, uma técnica utilizada para reduzir a resolução de imagens digitais descartando amostras.  
+
+#### ⚙️ Funcionamento
+- A imagem original está armazenada na **ROM** com dimensões <code>LARGURA × ALTURA</code> (neste projeto, <code>160 × 120</code>).  
+- A nova imagem reduzida é escrita na **RAM VGA** com dimensões <code>NEW_LARG × NEW_ALTURA</code>.  
+- O módulo seleciona apenas alguns pixels da entrada, pulando outros de acordo com o fator de redução definido (<code>FATOR</code>).  
+
+#### 🔄 Lógica do processo
+1. A imagem original é percorrida em passos de <code>FATOR</code> em ambas as direções (horizontal e vertical).  
+2. Apenas os pixels nas posições múltiplas de <code>FATOR</code> são copiados para a saída.  
+3. Assim, uma imagem de <code>160 × 120</code> com <code>FATOR = 2</code> é reduzida para <code>80 × 60</code>.  
+4. Ao final, o módulo aciona o sinal <code>done</code>, indicando que a redução está concluída.  
+
+#### 🎯 Vantagens
+- Implementação **simples** e **rápida** em hardware.  
+- Reduz significativamente a quantidade de dados a serem processados ou armazenados.  
+- Útil em aplicações de **pré-processamento** e **compressão de imagens**.  
+
+#### ⚠️ Limitação
+- Como pixels são descartados, pode haver **perda de detalhes** visuais.  
+- Linhas e bordas finas da imagem original podem desaparecer após a redução. </p>
+</p>
+
+<h3 id="media">Média de Blocos (Zoom-out)</h3>
+<p>O módulo implementa o algoritmo de <b>Zoom-out por média de blocos</b>, uma técnica que reduz a resolução da imagem calculando a média dos pixels em cada região.  
+
+#### ⚙️ Funcionamento
+- A imagem original é armazenada na **ROM** com dimensões <code>LARGURA × ALTURA</code>.  
+- A imagem reduzida é gerada na **RAM VGA** com dimensões <code>NEW_LARG × NEW_ALTURA</code>.  
+- Para cada bloco de tamanho <code>FATOR × FATOR</code> da imagem original, o módulo calcula a **média dos valores de intensidade** e escreve um único pixel na saída.  
+
+#### 🔄 Lógica do processo
+1. A imagem é dividida em blocos de <code>FATOR × FATOR</code>.  
+2. Os pixels de cada bloco são lidos e somados em um acumulador.  
+3. Ao final da leitura de todos os pixels do bloco, o valor médio é calculado.  
+4. Esse valor médio é armazenado na posição correspondente da imagem de saída.  
+5. O processo se repete para todos os blocos até completar a imagem.  
+
+#### 🎯 Vantagens
+- Reduz a imagem de forma mais **suave** que a decimação simples.  
+- Mantém mais informações globais da imagem, evitando perda brusca de detalhes.  
+- Adequado para aplicações de **compressão**, **pré-processamento** e **redução de ruído**.  
+
+#### ⚠️ Limitação
+- A operação de média pode causar **perda de nitidez** em áreas com muitos detalhes.  
+- Linhas ou padrões muito finos podem ficar menos visíveis após a redução. </p>
 </div>
 
 
