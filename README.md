@@ -20,13 +20,15 @@ Sumário
 =================
 <!--ts-->   
    * [Arquitetura do Projeto](#arquitetura)
-   * [Máquina de Estados](#maquina-de-estados)
-      * [IDLE](#idle)
-      * [READ_ROM](#read)
-      * [WRITE_RAM](#write)
-      * [DECODE](#resize)
-      * [MEMORY](#memory)
-      * [DONE](#done)
+   * [Unidade de Controle](#controle)
+       * [Decoder](#decoder)
+       * [Vga driver](#vga_driver)
+       * [Mapping & Offsets](#addr_mapping)
+       * [ROM](#rom)
+       * [RAM (framebuffer)](#ram)
+       * [Copier](#copier)
+       * [Mux de Saída](#mux)
+       * [Ciclo de Operação](#final)
    * [Unidade Lógica e Aritmética (ULA)](#ula)
       * [Replicação de Pixel (Zoom_in)](#rep_pixel)
       * [Vizinho mais próximo (Zoom-in)](#nn_zoomin)
@@ -42,28 +44,99 @@ Sumário
 </div>
 
 <div>
-  <h2 id="maquina-de-estados">Máquina de Estados</h2>
+<div>
+  <h2 id="controle">Unidade de Controle</h2>
   <p>
-  A máquina de estados é responsável por coordenar as operações de leitura, processamento e escrita de dados entre a ROM e a RAM. Abaixo estão os estados planejados para o fluxo:
+    Este módulo implementa a unidade de controle para um sistema de processamento e exibição de imagens em VGA.  
+    Ele integra a <b>ROM</b> (imagem original), a <b>RAM</b> (framebuffer ampliado) e o módulo <b>rom_to_ram</b>, 
+    responsável por aplicar os algoritmos de redimensionamento.  
+    Também gerencia a comunicação com o <b>driver VGA</b>, centralizando a imagem e controlando a saída de cores.
   </p>
 
-  <h2 id="idle">IDLE</h2>
-  <p>Estado inicial, aguardando alteração de imagem ou comando de processamento.</p>
+  <h3 id="decoder">Decoder</h3>
+  <p>
+    Converte os sinais de entrada em um <b>opcode</b>, 
+    definindo qual operação de redimensionamento deve ser executada.  
+    Além disso, gera o sinal <code>decoding</code>, que habilita o uso da RAM como framebuffer.
+  <div style="text-align:center;">
+  <table border="1" cellspacing="0" cellpadding="8" style="margin:auto; border-collapse:collapse;">
+    <tr>
+      <th>Opcode</th>
+      <th>Operação</th>
+    </tr>
+    <tr>
+      <td><code>001</code></td>
+      <td>Zoom-in por replicação de pixels</td>
+    </tr>
+    <tr>
+      <td><code>011</code></td>
+      <td>Zoom-in por vizinho mais próximo</td>
+    </tr>
+    <tr>
+      <td><code>010</code></td>
+      <td>Zoom-out por decimação</td>
+    </tr>
+    <tr>
+      <td><code>100</code></td>
+      <td>Zoom-out por média de blocos</td>
+    </tr>
+  </table>
+</div>
 
-  <h2 id="read">READ_ROM</h2>
-  <p>Realiza a leitura da imagem a partir da memória ROM.</p>
+</p>
 
-  <h2 id="write">WRITE_RAM</h2>
-  <p>Escreve a imagem na RAM após leitura e/ou processamento.</p>
+  <h3 id="vga_driver">VGA Driver</h3>
+  <p>
+    Gera os sinais de sincronismo e controla a varredura da tela VGA.  
+    Informa as próximas coordenadas de pixel a serem exibidas e recebe os valores de cor correspondentes da ROM ou RAM.
+  </p>
 
-  <h2 id="resize">DECODE</h2>
-  <p>Executa os algoritmos de redimensionamento (zoom in ou zoom out), caso habilitado.</p>
+  <h3 id="addr_mapping">Mapping e Offsets</h3>
+  <p>
+    Calcula os parâmetros da imagem de acordo com o fator de redimensionamento e centraliza na tela VGA 
+    (640×480) através dos offsets.  
+    Também mapeia as coordenadas da tela para endereços de memória da ROM e da RAM.
+  </p>
 
-  <h2 id="memory">MEMORY</h2>
-  <p>Confirma a integridade da operação de escrita na RAM.</p>
+  <h3 id="rom">ROM (Imagem Original)</h3>
+  <p>
+    Armazena a imagem original em baixa resolução 160×120.  
+    Quando não há redimensionamento ativo, o sistema lê diretamente os pixels da ROM para exibição na tela.
+  </p>
 
-  <h2 id="done">DONE</h2>
-  <p>Finaliza o ciclo e retorna ao estado IDLE.</p>
+  <h3 id="ram">RAM (Framebuffer)</h3>
+  <p>
+    Recebe a imagem processada pelo copier.  
+    Quando o redimensionamento está habilitado entra em estado de decoding e a saída exibida vem da RAM, 
+    garantindo que a imagem ampliada ou reduzida seja renderizada corretamente.
+  </p>
+
+  <h3 id="copier">Copier</h3>
+  <p>
+    Copia e processa a imagem da ROM para a RAM conforme o algoritmo selecionado no <code>opcode</code>:  
+    <ul>
+      <li>Zoom-in por replicação de pixels</li>
+      <li>Zoom-in por vizinho mais próximo</li>
+      <li>Zoom-out por decimação</li>
+      <li>Zoom-out por média de blocos</li>
+    </ul>
+    Gera os sinais de escrita da RAM e sinaliza o término da operação com done.
+  </p>
+
+  <h3 id="mux">MUX de Saída</h3>
+  <p>
+    Seleciona entre os dados da ROM ou da RAM, dependendo do modo de operação.  
+    O valor escolhido é então enviado ao driver VGA para exibição do pixel.
+  </p>
+
+  <h3 id="final">Ciclo de Operação</h3>
+  <p>
+    1. O usuário define o modo no seletor.<br>
+    2. O <b>decoder</b> gera o opcode e habilita/desabilita a RAM.<br>
+    3. O módulo <b>rom_to_ram</b> processa a imagem (se necessário).<br>
+    4. O <b>multiplexador</b> escolhe a fonte de dados (ROM ou RAM).<br>
+    5. O <b>driver VGA</b> exibe a imagem centralizada na tela.<br>
+  </p>
 </div>
 
 <div>
