@@ -119,7 +119,7 @@ Sumário
   <p>
     1. O usuário define o modo no seletor.<br>
     2. O <b>decoder</b> gera o opcode e habilita/desabilita a RAM.<br>
-    3. O módulo <b>rom_to_ram</b> processa a imagem (se necessário).<br>
+    3. O módulo <b>ALU</b> processa a imagem (se necessário).<br>
     4. O <b>multiplexador</b> escolhe a fonte de dados (ROM ou RAM).<br>
     5. O <b>driver VGA</b> exibe a imagem centralizada na tela.<br>
   </p>
