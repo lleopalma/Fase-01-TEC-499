@@ -22,8 +22,8 @@ Sumário
    * [Arquitetura do Projeto](#arquitetura)
    * [Unidade de Controle](#controle)
        * [Decoder](#decoder)
-       * [Vga driver](#vga_driver)
-       * [Mapping & Offsets](#addr_mapping)
+       * [VGA driver](#vga_driver)
+       * [Mapping e Offsets](#addr_mapping)
        * [ROM](#rom)
        * [RAM (framebuffer)](#ram)
        * [Copier](#copier)
@@ -53,13 +53,14 @@ Sumário
     Também gerencia a comunicação com o <b>driver VGA</b>, centralizando a imagem e controlando a saída de cores.
   </p>
 
-  <h3 id="decoder">Decoder</h3>
-  <p>
-    Converte os sinais de entrada em um <b>opcode</b>, 
-    definindo qual operação de redimensionamento deve ser executada.  
-    Além disso, gera o sinal <code>decoding</code>, que habilita o uso da RAM como framebuffer.
-  <div style="text-align:center;">
-  <table border="1" cellspacing="0" cellpadding="8" style="margin:auto; border-collapse:collapse;">
+<h3 id="decoder">Decoder</h3>
+<p>
+  Converte os sinais de entrada em um <b>opcode</b>, 
+  definindo qual operação de redimensionamento deve ser executada.  
+  Além disso, gera o sinal <code>decoding</code>, que habilita o uso da RAM como framebuffer.
+</p>
+
+ <table border="1" align="center">
     <tr>
       <th>Opcode</th>
       <th>Operação</th>
@@ -82,8 +83,6 @@ Sumário
     </tr>
   </table>
 </div>
-
-</p>
 
   <h3 id="vga_driver">VGA Driver</h3>
   <p>
