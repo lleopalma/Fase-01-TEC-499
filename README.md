@@ -26,7 +26,6 @@ Sumário
        * [Mapping e Offsets](#addr_mapping)
        * [ROM](#rom)
        * [RAM (framebuffer)](#ram)
-       * [Copier](#copier)
        * [Mux de Saída](#mux)
        * [Ciclo de Operação](#final)
    * [Unidade Lógica e Aritmética (ULA)](#ula)
@@ -108,18 +107,6 @@ Sumário
     Recebe a imagem processada pelo copier.  
     Quando o redimensionamento está habilitado entra em estado de decoding e a saída exibida vem da RAM, 
     garantindo que a imagem ampliada ou reduzida seja renderizada corretamente.
-  </p>
-
-  <h3 id="copier">Copier</h3>
-  <p>
-    Copia e processa a imagem da ROM para a RAM conforme o algoritmo selecionado no <code>opcode</code>:  
-    <ul>
-      <li>Zoom-in por replicação de pixels</li>
-      <li>Zoom-in por vizinho mais próximo</li>
-      <li>Zoom-out por decimação</li>
-      <li>Zoom-out por média de blocos</li>
-    </ul>
-    Gera os sinais de escrita da RAM e sinaliza o término da operação com done.
   </p>
 
   <h3 id="mux">MUX de Saída</h3>
