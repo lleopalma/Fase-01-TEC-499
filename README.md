@@ -176,6 +176,11 @@ Sumário
 <p>
 <p>O módulo implementa o algoritmo de <b>Zoom-in por replicação de pixels</b>, uma técnica de redimensionamento de imagens.  
 
+<div align="center">
+    <img src="imagens/ReplicaçãoPixel.gif"><br>
+    <strong>Simulação do algoritmo <code>160 × 120</code> para <code>320 × 240</code> </strong><br><br>
+</div>
+
 #### &#8594; Funcionamento
 - A imagem original é armazenada na **ROM** com dimensões <code>LARGURA × ALTURA</code>.  
 - Cada pixel é copiado várias vezes em sequência, formando um bloco de tamanho <code>FATOR × FATOR</code> na imagem de saída.  
@@ -196,6 +201,11 @@ Sumário
 <h3 id="nn_zoomin">Vizinho mais próximo (Zoom-in)</h3>
 <p>
 <p>O módulo implementa o algoritmo de <b>Zoom-in por vizinho mais próximo</b>, uma técnica de redimensionamento em que cada novo pixel da imagem ampliada assume o valor do pixel original mais próximo.  
+
+<div align="center">
+    <img src="imagens/Vizinho.gif"><br>
+    <strong>Simulação do algoritmo <code>160 × 120</code> para <code>320 × 240</code> </strong><br><br>
+</div>
 
 #### &#8594; Funcionamento
 - A imagem original está armazenada na **ROM** com dimensões <code>LARGURA × ALTURA</code>.  
@@ -219,6 +229,11 @@ Sumário
 <p>
 <p>O módulo implementa o algoritmo de <b>Zoom-out por decimação de pixels</b>, uma técnica de redimensionamento de imagens digitais descartando parte dos pixels da imagem original.  
 
+<div align="center">
+    <img src="imagens/Decimacao.gif"><br>
+    <strong>Simulação do algoritmo <code>160 × 120</code> para <code>80 × 60</code> </strong><br><br>
+</div>
+
 #### &#8594; Funcionamento
 - A imagem original está armazenada na **ROM** com dimensões <code>LARGURA × ALTURA</code>.  
 - A nova imagem reduzida é escrita na **RAM VGA** com dimensões <code>NEW_LARG × NEW_ALTURA</code>.  
@@ -241,6 +256,11 @@ Sumário
 <h3 id="media">Média de Blocos (Zoom-out)</h3>
 <p>
 <p>O módulo implementa o algoritmo de <b>Zoom-out por média de blocos</b>, uma técnica que reduz a resolução da imagem calculando a média dos pixels em cada região.  
+
+<div align="center">
+    <img src="imagens/media.gif"><br>
+    <strong>Simulação do algoritmo <code>160 × 120</code> para <code>80 × 60</code> </strong><br><br>
+</div>
 
 #### &#8594; Funcionamento
 - A imagem original é armazenada na **ROM** com dimensões <code>LARGURA × ALTURA</code>.  
