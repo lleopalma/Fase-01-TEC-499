@@ -54,16 +54,16 @@ Sumário
     Ele integra a <b>ROM</b> (imagem original), a <b>RAM</b> (framebuffer ampliado) e o módulo <b>rom_to_ram</b>, 
     responsável por aplicar os algoritmos de redimensionamento.  
     Também gerencia a comunicação com o <b>driver VGA</b>, centralizando a imagem e controlando a saída de cores.
-<div align="center">
+    <div align="center">
     <img src="imagens/UnidadeControle.jpeg"><br>
-    <strong>Imagem do ciclo de instrução de UC</strong><br><br>
-  </p>
-
+        <strong>Imagem do ciclo de instrução de UC</strong><br><br>
+    </div>
+</p>
 <h3 id="decoder">Decoder</h3>
 <p>
   Converte os sinais de entrada em um <b>opcode</b>, 
   definindo qual operação de redimensionamento deve ser executada.  
-  Além disso, gera o sinal <code>decoding</code>, que habilita o uso da RAM como framebuffer.
+  Além disso, gera o sinal decoding, que habilita o uso da RAM como framebuffer.
 </p>
 
  <table border="1" align="center">
@@ -290,10 +290,10 @@ Sumário
   <h2 id="referencias">Referências</h2>
     
   * PATTERSON, D. A.; HENNESSY, J. L. Computer organization and design : the hardware/software interface, ARM edition / Computer organization and design : the hardware/software interface, ARM edition.<br>
-‌  * FPGAcademy. Disponível em: <https://fpgacademy.org>.<br>
   * Cyclone V Device Overview. Disponível em: <https://www.intel.com/content/www/us/en/docs/programmable/683694/current/cyclone-v-device-overview.html>.<br>
   * TECHNOLOGIES, T. Terasic - SoC Platform - Cyclone - DE1-SoC Board. Disponível em: <https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&No=836>.<br>
   * DUNNE, Robert. Computer Architecture Tutorial Using an FPGA: ARM & Verilog Introductions. Downers Grove, Illinois: Gaul Communications, 2020. ISBN 978--970112491.<br>
   * GONZALEZ, Rafael C.; WOODS, Richard E. Processamento Digital de Imagens. 3. ed. São Paulo: Pearson Prentice Hall, 2010.
+  * FPGAcademy. Disponível em: <https://fpgacademy.org>.<br>
 
 </div>
