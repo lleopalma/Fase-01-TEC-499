@@ -40,6 +40,9 @@ Sumário
   <h2 id="arquitetura">Arquitetura do Projeto</h2>
   <p>
   O coprocessador foi desenvolvido utilizando módulos em Verilog que interagem entre si para realizar a leitura da ROM, escrita na RAM e processamento por algoritmos de redimensionamento. A arquitetura é composta pelos módulos principais: <strong>ROM</strong>, <strong>RAM</strong>, <strong>Unidade de Controle</strong> e <strong>Unidade Lógica e Aritmética (ULA)</strong>.
+<div align="center">
+    <img src="imagens/Arquitetura.jpeg"><br>
+    <strong>Imagem da Arquitetura do Projeto</strong><br><br>
   </p>
 </div>
 
@@ -51,6 +54,9 @@ Sumário
     Ele integra a <b>ROM</b> (imagem original), a <b>RAM</b> (framebuffer ampliado) e o módulo <b>rom_to_ram</b>, 
     responsável por aplicar os algoritmos de redimensionamento.  
     Também gerencia a comunicação com o <b>driver VGA</b>, centralizando a imagem e controlando a saída de cores.
+<div align="center">
+    <img src="imagens/UnidadeControle.jpeg"><br>
+    <strong>Imagem do ciclo de instrução de UC</strong><br><br>
   </p>
 
 <h3 id="decoder">Decoder</h3>
