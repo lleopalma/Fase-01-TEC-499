@@ -28,6 +28,7 @@ Sumário
        * [RAM (framebuffer)](#ram)
        * [Mux de Saída](#mux)
        * [Ciclo de Operação](#final)
+   * [Memória](#memoria)
    * [Unidade Lógica e Aritmética (ULA)](#ula)
       * [Replicação de Pixel (Zoom_in)](#rep_pixel)
       * [Vizinho mais próximo (Zoom-in)](#nn_zoomin)
@@ -122,6 +123,39 @@ Sumário
     3. O módulo <b>ALU</b> processa a imagem (se necessário).<br>
     4. O <b>multiplexador</b> escolhe a fonte de dados (ROM ou RAM).<br>
     5. O <b>driver VGA</b> exibe a imagem centralizada na tela.<br>
+  </p>
+</div>
+<div>
+  <h2 id="memoria">Memória</h2>
+  <p>
+    O sistema utiliza dois tipos principais de memória: <b>ROM</b>, que armazena a imagem original em baixa resolução,
+    e <b>RAM</b>, utilizada como framebuffer para armazenar as imagens processadas.  
+    A interação entre essas memórias garante flexibilidade no redimensionamento, permitindo alternar entre a exibição da imagem
+    original e a exibição da versão ampliada ou reduzida.
+  </p>
+
+  <h3>ROM (Read-Only Memory)</h3>
+  <p>
+    A <b>ROM</b> armazena a imagem base com resolução <code>160×120</code>.  
+    Ela é de acesso somente leitura, garantindo que os dados originais permaneçam inalterados.  
+    Quando o sistema não executa nenhuma operação de redimensionamento, os pixels são lidos diretamente da ROM para a saída VGA.
+  </p>
+
+  <h3>RAM (Random Access Memory)</h3>
+  <p>
+    A <b>RAM</b> funciona como <i>framebuffer</i>, recebendo as imagens já processadas pelos algoritmos da ULA.  
+    Nessas situações, a saída da tela VGA é alimentada pela RAM, que armazena a versão ampliada ou reduzida da imagem.  
+    Esse mecanismo permite processar os dados em tempo real e exibir o resultado com eficiência.
+  </p>
+
+  <h3>Integração ROM ↔ RAM</h3>
+  <p>
+    A comunicação entre ROM e RAM ocorre por meio da <b>unidade de controle</b> e dos módulos de processamento.  
+    - A ROM fornece os pixels originais para a ULA.<br>
+    - A ULA aplica o algoritmo de redimensionamento selecionado.<br>
+    - O resultado é escrito na RAM, que serve de fonte para o <b>driver VGA</b>.  
+    Essa integração garante que o sistema possa alternar de forma dinâmica entre a exibição direta da imagem original
+    ou da versão redimensionada.
   </p>
 </div>
 
