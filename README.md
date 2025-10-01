@@ -34,6 +34,7 @@ Sumário
       * [Vizinho mais próximo (Zoom-in)](#nn_zoomin)
       * [Decimação/Vizinho mais próximo (Zoom-out)](#dec)
       * [Média de Blocos(Zoom-out)](#media)
+   * [Análise dos resultados alcançados](#resultados)
    * [Referências](#referencias)
 
 <div>
@@ -285,6 +286,7 @@ Sumário
 
 
 </div>
+<h2 id="resultados">Análise dos resultados alcançados</h2>    
 
 <div>
   <h2 id="referencias">Referências</h2>
