@@ -57,7 +57,7 @@ Sumário
     Também gerencia a comunicação com o <b>driver VGA</b>, centralizando a imagem e controlando a saída de cores.
     <div align="center">
     <img src="imagens/UnidadeControle.jpeg"><br>
-        <strong>Imagem do ciclo de instrução de UC</strong><br><br>
+        <strong>Imagem do ciclo de instrução da UC</strong><br><br>
     </div>
 </p>
 <h3 id="decoder">Decoder</h3>
