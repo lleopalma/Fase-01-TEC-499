@@ -287,6 +287,14 @@ Sumário
 
 </div>
 <h2 id="resultados">Análise dos resultados alcançados</h2>    
+<p>
+A análise dos resultados obtidos demonstra que a arquitetura proposta cumpre com os objetivos estabelecidos para o projeto, apresentando um funcionamento consistente na execução dos algoritmos de redimensionamento. Durante os testes, foi identificado um pequeno desvio na captura da borda inicial da imagem, que se manifesta de forma mais perceptível no algoritmo de decimação. Ainda assim, nas técnicas de replicação de pixels, vizinho mais próximo e média de blocos, esse efeito é suavizado, garantindo uma apresentação visual mais estável e próxima do esperado. Essa observação destaca tanto as limitações inerentes a determinados métodos quanto a robustez da implementação em lidar com situações adversas.
+</p>
+
+<p>
+Apesar da presença desse detalhe, a arquitetura desenvolvida mostrou-se eficiente e plenamente funcional, integrando de maneira satisfatória os módulos de controle, memória e ULA. Ressalta-se, entretanto, que a imagem está sendo inicialmente armazenada na ROM, quando o ideal seria que fosse manipulada apenas na RAM, otimizando a flexibilidade e eliminando a redundância no fluxo de dados. Ainda assim, o coprocessador foi capaz de realizar operações de zoom-in com fatores de 2× e 4×, além de zoom-out com fatores de 0,5× e 0,25×, alcançando resultados compatíveis com as metas do projeto. Dessa forma, conclui-se que o sistema pode ser utilizado de forma eficaz para o redimensionamento de imagens, atendendo aplicações práticas de processamento digital de imagens embarcadas.
+</p>
+
 
 <div>
   <h2 id="referencias">Referências</h2>
